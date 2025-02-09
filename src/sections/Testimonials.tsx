@@ -1,3 +1,4 @@
+"use client"
 import avatar1 from "@/assets/avatar-1.png";
 import avatar2 from "@/assets/avatar-2.png";
 import avatar3 from "@/assets/avatar-3.png";
@@ -9,6 +10,9 @@ import avatar8 from "@/assets/avatar-8.png";
 import avatar9 from "@/assets/avatar-9.png";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
+import { motion } from 'framer-motion'
+import React from "react";
+
 
 const testimonials = [
   {
@@ -68,38 +72,53 @@ const testimonials = [
 ];
 
 
-const firstColumn=testimonials.slice(0,3)
-const secondColumn=testimonials.slice(3,6)
-const thirdColumn=testimonials.slice(6,9)
+const firstColumn = testimonials.slice(0, 3)
+const secondColumn = testimonials.slice(3, 6)
+const thirdColumn = testimonials.slice(6, 9)
 
 
 
 
-const TestimonialsColumn=(props:{className?:string;testimonials: typeof  testimonials})=>(
-  <div className={twMerge("flex flex-col gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]",props.className)}>
-  {props.testimonials.map(({text,imageSrc,name,username},index)=>(
-      <div key={index} className="card ">
-        <div>
-          {text}
-        </div >
-        <div className="flex items-center gap-2 mt-5 ">
+const TestimonialsColumn = (props: { className?: string; testimonials: typeof testimonials, duration?: number }) => (
+  <motion.div
+    animate={{
+      translateY: "-50%"
+    }}
+    transition={{
+      duration: props.duration || 10,
+      repeat: Infinity,
+      ease: "linear",
+      repeatType: "loop"
+    }}
+    className={twMerge("flex flex-col gap-6 mt-10  mb-6", props.className)}>
+    {[...new Array(2)].fill(0).map((_, index) => (
+      <React.Fragment key={index}>
+        {props.testimonials.map(({ text, imageSrc, name, username }, index) => (
+          <div key={index} className="card ">
+            <div>
+              {text}
+            </div >
+            <div className="flex items-center gap-2 mt-5 ">
 
-        <Image  src={imageSrc} alt="name" className="w-10 h-10 rounded-full"
-        width={40} height={40}
-        />
-        <div className="flex flex-col">
-          <div className="font-medium tracking-tight leading-5">
-               {name}
+              <Image src={imageSrc} alt="name" className="w-10 h-10 rounded-full"
+                width={40} height={40}
+              />
+              <div className="flex flex-col">
+                <div className="font-medium tracking-tight leading-5">
+                  {name}
+                </div>
+                <div className="leading-5 tracking-tight">
+                  {username}
+                </div>
+              </div>
+            </div>
+
           </div>
-          <div className="leading-5 tracking-tight">
-              {username}
-          </div>
-        </div>
-        </div>
-                
-      </div>
-  ))}
-</div>
+        ))}
+      </React.Fragment>
+    ))}
+
+  </motion.div>
 )
 
 export const Testimonials = () => {
@@ -107,18 +126,18 @@ export const Testimonials = () => {
 
     <div className="container">
       <div className="section-heading">
-    <div className="flex justify-center">
-      <div className="tag">Testimonials</div>
-    </div>
+        <div className="flex justify-center">
+          <div className="tag">Testimonials</div>
+        </div>
         <h2 className="section-title mt-5">What our users say</h2>
         <p className="section-description mt-5">From intuitive design to powerfull features, our app has become an esential tool for users the world</p>
-  
+
       </div>
-<div className="flex  justify-center gap-6">
-       <TestimonialsColumn testimonials={firstColumn} />
-       <TestimonialsColumn testimonials={secondColumn} className="hidden md:flex" />
-       <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:flex" />
-  </div>
+      <div className="flex  justify-center gap-6 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[738px] overflow-hidden">
+        <TestimonialsColumn testimonials={firstColumn} />
+        <TestimonialsColumn testimonials={secondColumn} className="hidden md:flex" duration={20} />
+        <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:flex" duration={30} />
+      </div>
     </div>
   </section>
 };
